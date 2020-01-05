@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from "axios";
+import Movie from "./Movie";
+import "./App.css";
 
 // react executes render method of class component.
 class App extends React.Component { 
@@ -7,20 +9,40 @@ class App extends React.Component {
     isLoading :true,
     movies : []
   };
-  getMoviews = async () => { // function is async -> you should wait something 
-    const {data: {data: {movies}}} = await axios.get("https://yts-proxy.now.sh/list_movies.json"); // wait for axios
-    console.log(movies);
+  getMovies = async () => { // function is async -> you should wait something 
+    const {data: {data: {movies}}} = await axios.get("https://yts-proxy.now.sh/list_movies.json?sort_by=rating"); // wait for axios
+    this.setState({ movies, isLoading:false}) // (setstate's movies:)  movies from axios
   }
 
   componentDidMount(){
-    this.getMoviews();
+    this.getMovies();
   }
   render(){
-        const { isLoading } = this.state;
-        return <div> {isLoading ? "Loading...":"We are ready"} </div>;
+    const { isLoading, movies } = this.state;
+    return (
+      <section className="container"> 
+      {isLoading ? (
+        <div className = "loader">
+          <span className = "loader_text">Loading...</span>
+        </div>
+      ) : (
+        <div className="movies">
+          {movies.map(movie => (
+            <Movie 
+              key={movie.id}
+              id={movie.id}
+              year={movie.year}
+              title={movie.title} 
+              summary={movie.summary} 
+              poster={movie.medium_cover_image} 
+              genres={movie.genres}
+            />
+          ))}
+        </div>
+    )}
+      </section>
+    );
   }
 }
 
 export default App;
-
-
