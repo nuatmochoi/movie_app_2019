@@ -1,42 +1,26 @@
 import React from 'react';
-import PropTypes from "prop-types"
+import axios from "axios";
 
 // react executes render method of class component.
 class App extends React.Component { 
-  constructor(props){
-    super(props);
-    console.log("hello");
-  }
   state = {
-    count: 0
+    isLoading :true,
+    movies : []
   };
-  add = () => {
-    this.setState(current => ({count: current.count + 1})); // setState -> refresh state, call render()
-  };
-  minus = () => {
-    this.setState(current => ({count: current.count - 1}));
-  };
+  getMoviews = async () => { // function is async -> you should wait something 
+    const {data: {data: {movies}}} = await axios.get("https://yts-proxy.now.sh/list_movies.json"); // wait for axios
+    console.log(movies);
+  }
+
   componentDidMount(){
-    console.log("component rendered");
-  }
-  componentDidUpdate(){
-    console.log("i just updated");
-  }
-  componentWillUnmount(){
-    console.log("Goodbye, cruel world");
+    this.getMoviews();
   }
   render(){
-    console.log("I'm rendering");
-    return (
-      <div>
-        <h1> The number is : {this.state.count}</h1>
-        <button onClick={this.add}>Add</button>
-        <button onClick={this.minus}>Minus</button>
-      </div>
-    );
+        const { isLoading } = this.state;
+        return <div> {isLoading ? "Loading...":"We are ready"} </div>;
   }
 }
 
 export default App;
 
-//mounting / updating 
+
