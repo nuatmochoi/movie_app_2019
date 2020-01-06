@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-function Movie({ year, title, summary,poster, genres}){
+function Movie({ year, title, summary,poster, genres=[]}){ // genres=[] => setting as default
     return (
     <div className ="movie">
         <img src={poster} alt={title} title={title}/>
